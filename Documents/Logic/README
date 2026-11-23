@@ -1,0 +1,48 @@
+# Logic folder – how to read it
+
+This folder is the **design backbone** of NEXUS written before implementation. It mirrors the final project tree
+(`nexus/…`). Every source file of the project has one logic document here with the same name plus `.md`.
+
+Each logic document describes, in plain language and pseudocode:
+
+1. **Purpose** – why the file exists.
+2. **Responsibilities / state** – what it owns.
+3. **Operations** – public methods with pre- and postconditions.
+4. **Algorithm** – rough code / pseudocode of the important parts.
+5. **Concepts** – which Software Construction concept the file demonstrates.
+6. **Tests** – which test class covers it.
+
+These documents, together with the official design documents (01–09) in the parent folder, were given to the AI
+coding assistant to generate the implementation. The team then reviewed, tested and corrected the code
+(see 10 – Software Testing Document and 11 – Bug Tracking and Resolution Report).
+
+## Suggested implementation order
+| Step | Files | Why first |
+|---|---|---|
+| 1 | `model/Thresholds`, enums, records | Pure values, no dependencies |
+| 2 | `routing/Topology`, `Route`, `TopologyRouter` | Needed by DataCenter.migrateOne |
+| 3 | `model/DataCenter`, `EventLog` | Core ADTs with checkRep |
+| 4 | `Nexus.g4`, `dsl/*` | Parser and interpreter |
+| 5 | `agents/*` | Agents and safety layer |
+| 6 | `sim/*` | Engine and fault injection |
+| 7 | `web/*`, `NexusApp` | HTTP API and entry point |
+| 8 | `resources/web/*` | Dashboard |
+| 9 | `test/*` | Written from the partitions in Document 10 (test-first: before step 3–6 code) |
+
+## Tree
+```
+nexus/
+├── pom.xml.md, run.bat.md, run.sh.md, README.md.md
+└── src/
+    ├── main/antlr4/com/nexus/dsl/Nexus.g4.md
+    ├── main/java/com/nexus/
+    │   ├── NexusApp.java.md
+    │   ├── model/    (19 files)
+    │   ├── routing/  (3 files)
+    │   ├── dsl/      (10 files)
+    │   ├── agents/   (11 files)
+    │   ├── sim/      (4 files)
+    │   └── web/      (3 files)
+    ├── main/resources/web/  index.html.md, css/style.css.md, js/app.js.md, js/scene.js.md, js/charts.js.md
+    └── test/java/com/nexus/ (8 test classes)
+```
